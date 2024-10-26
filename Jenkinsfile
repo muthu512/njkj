@@ -5,14 +5,14 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 // Clone your GitHub repository
-                git url: 'https://github.com/muthu512/DeploySpringBoot.git', branch: 'master'
+                git url: 'https://github.com/muthu512/njkj', branch: 'master'
             }
         }
 
         stage('Build') {
             steps {
                 // Build the project using Maven
-                bat 'mvn clean package -DskipTests'
+                bat 'mvn clean package'
             }
         }
 
