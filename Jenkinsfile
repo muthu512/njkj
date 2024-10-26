@@ -4,8 +4,13 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // This will automatically clone the repository based on the SCM configuration in Jenkins
-                checkout scm
+                script {
+                    // Use withCredentials to access Git credentials
+                    withCredentials([usernamePassword(credentialsId: 'muthu512', usernameVariable: 'GIT_USERNAME', passwordVariable: '512494')]) {
+                        // Clone the repository using the provided credentials
+                        bat "git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@your-git-repo-url.git"
+                    }
+                }
             }
         }
 
@@ -27,7 +32,7 @@ pipeline {
                     bat "copy /Y \"${buildJar}\" \"${deployJar}\""
 
                     // Run the JAR directly from the deployment folder with arguments
-                    bat "start java -jar \"${deployJar}\" --server.port=2020"
+                    bat "start java -jar \"${deployJar}\" --spring.profiles.active=prod --server.port=1010"
                 }
             }
         }
