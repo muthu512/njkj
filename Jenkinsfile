@@ -15,13 +15,6 @@ pipeline {
             }
         }
 
-        stage('Build') {
-            steps {
-                // Build the project using Maven
-                bat 'mvn clean package'
-            }
-        }
-
         stage('Deploy') {
             steps {
                 script {
