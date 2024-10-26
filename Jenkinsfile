@@ -26,12 +26,19 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    // Define the JAR file path
+                    // Define the JAR file path from the Jenkins workspace after build
                     def jarFile = "C:\\Users\\Dell-Lap\\.jenkins\\workspace\\DeploySpringBoot\\target\\spring-boot-2-hello-world-1.0.2-SNAPSHOT.jar"
+                    def targetDir = "C:\\Users\\Dell-Lap\\Downloads\\Newfolder"
 
-                    // Change the working directory and run the JAR from the target folder
-                    dir('C:\\Users\\Dell-Lap\\Downloads\\Newfolder') {
-                        bat "start java -jar ${jarFile} --server.port=1010"
+                    // Ensure the target directory exists
+                    bat "mkdir ${targetDir}"
+
+                    // Copy the JAR file to the target directory
+                    bat "copy ${jarFile} ${targetDir}"
+
+                    // Change to the target directory and run the JAR
+                    dir(targetDir) {
+                        bat "start java -jar spring-boot-2-hello-world-1.0.2-SNAPSHOT.jar --server.port=1010"
                     }
                 }
             }
