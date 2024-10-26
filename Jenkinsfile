@@ -28,7 +28,7 @@ pipeline {
                     bat "copy /Y \"${buildJar}\" \"${deployJar}\""
 
                     // Run the JAR directly from the deployment folder
-                    bat "start java -jar \"${deployJar}\" --server.port=1010"  // Fixed syntax here
+                    bat "start java -jar \"${deployJar}\""  // Removed port option
                 }
             }
         }
