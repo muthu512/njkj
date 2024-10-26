@@ -1,47 +1,45 @@
 pipeline {
-    agent any 
+    agent any
 
     stages {
-        stage('Checkout') {
+        stage('Clone Repository') {
             steps {
-                // Checkout your code
-                git 'https://github.com/muthu512/njkj.git'
+                // Clone your GitHub repository
+                git url: 'https://github.com/muthu512/DeploySpringBoot.git', branch: 'master'
             }
         }
 
         stage('Build') {
             steps {
-                // Build the application
-                bat 'mvn clean package'
-            }
-        }
-
-        stage('Test') {
-            steps {
-                // Run tests
-                bat 'mvn test'
+                // Build the project using Maven
+                bat 'mvn clean package -DskipTests'
             }
         }
 
         stage('Deploy') {
             steps {
                 script {
-                    // Define the JAR file path from the Jenkins workspace after build
-                    def jarFile = "C:\\Users\\Dell-Lap\\.jenkins\\workspace\\DeploySpringBoot\\target\\spring-boot-2-hello-world-1.0.2-SNAPSHOT.jar"
-                    def targetDir = "C:\\Users\\Dell-Lap\\Downloads\\Newfolder"
+                    // Define paths
+                    def buildJar = "C:\\Users\\Dell-Lap\\.jenkins\\workspace\\DeploySpringBoot\\target\\spring-boot-2-hello-world-1.0.2-SNAPSHOT.jar"
+                    def deployFolder = "C:\\Users\\Dell-Lap\\Downloads\\Newfolder"
+                    def deployJar = "${deployFolder}\\spring-boot-2-hello-world-1.0.2-SNAPSHOT.jar"
 
-                    // Ensure the target directory exists
-                    bat "mkdir ${targetDir}"
+                    // Copy the JAR to the specified deployment folder
+                    bat "copy /Y \"${buildJar}\" \"${deployJar}\""
 
-                    // Copy the JAR file to the target directory
-                    bat "copy ${jarFile} ${targetDir}"
-
-                    // Change to the target directory and run the JAR
-                    dir(targetDir) {
-                        bat "start java -jar spring-boot-2-hello-world-1.0.2-SNAPSHOT.jar --server.port=1010"
-                    }
+                    // Run the JAR directly from the deployment folder
+                    bat "start java -jar \"${deployJar}\" --server.port=1010"  // Fixed syntax here
                 }
             }
+        }
+    }
+
+    post {
+        success {
+            echo 'Deployment successful!'
+        }
+        failure {
+            echo 'Deployment failed.'
         }
     }
 }
