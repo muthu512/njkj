@@ -6,7 +6,7 @@ pipeline {
             steps {
                 script {
                     // Use withCredentials to access Git credentials
-                    withCredentials([usernamePassword(credentialsId: 'muthu512', usernameVariable: 'GIT_USERNAME', passwordVariable: '512494')]) {
+                    withCredentials([usernamePassword(credentialsId: 'muthu512', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
                         // Clone the repository using the provided credentials
                         bat "git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@your-git-repo-url.git"
                     }
