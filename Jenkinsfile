@@ -16,6 +16,13 @@ pipeline {
             }
         }
 
+        stage('Test') {
+            steps {
+                // Run tests
+                bat 'mvn test'
+            }
+        }
+
         stage('Deploy') {
             steps {
                 script {
