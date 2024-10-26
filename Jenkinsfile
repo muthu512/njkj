@@ -2,33 +2,33 @@ pipeline {
     agent any
 
     stages {
-        stage('Clone Repository') {
+        stage('Checkout') {
             steps {
-                // Clone your GitHub repository
-                git url: 'https://github.com/muthu512/njkj', branch: 'master'
+                // This will automatically clone the repository based on the SCM configuration in Jenkins
+                checkout scm
             }
         }
 
         stage('Build') {
             steps {
-                // Build the project using Maven
                 bat 'mvn clean package'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                bat 'mvn test'
             }
         }
 
         stage('Deploy') {
             steps {
                 script {
-                    // Define paths
                     def buildJar = "C:\\Users\\Dell-Lap\\.jenkins\\workspace\\DeploySpringBoot\\target\\spring-boot-2-hello-world-1.0.2-SNAPSHOT.jar"
                     def deployFolder = "C:\\Users\\Dell-Lap\\Downloads\\Newfolder"
                     def deployJar = "${deployFolder}\\spring-boot-2-hello-world-1.0.2-SNAPSHOT.jar"
-
-                    // Copy the JAR to the specified deployment folder
                     bat "copy /Y \"${buildJar}\" \"${deployJar}\""
-
-                    // Run the JAR directly from the deployment folder
-                    bat "start java -jar \"${deployJar}\""  // Removed port option
+                    bat "java -jar \"${deployJar}\""
                 }
             }
         }
