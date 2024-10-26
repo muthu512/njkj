@@ -4,19 +4,13 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                script {
-                    // Use withCredentials to access Git credentials
-                    withCredentials([usernamePassword(credentialsId: 'muthu512', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
-                        // Clone the repository using the provided credentials
-                        bat "git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/muthu512/njkj.git"
-                    }
-                }
+                // This will automatically clone the repository based on the SCM configuration in Jenkins
+                checkout scm
             }
         }
 
         stage('Build') {
             steps {
-                // Build the project using Maven
                 bat 'mvn clean package'
             }
         }
@@ -25,12 +19,9 @@ pipeline {
             steps {
                 script {
                     // Define paths
-                    def buildJar = "C:\\Users\\Dell-Lap\\.jenkins\\workspace\\muthu kumaran\\njkj\\target\\spring-boot-2-hello-world-1.0.2-SNAPSHOT.jar"
+                    def buildJar = "C:\\Users\\Dell-Lap\\.jenkins\\workspace\\DeploySpringBoot\\target\\spring-boot-2-hello-world-1.0.2-SNAPSHOT.jar"
                     def deployFolder = "C:\\Users\\Dell-Lap\\Downloads\\Newfolder"
                     def deployJar = "${deployFolder}\\spring-boot-2-hello-world-1.0.2-SNAPSHOT.jar"
-
-                    // Ensure the deployment folder exists
-                    bat "mkdir ${deployFolder}"
 
                     // Copy the JAR to the specified deployment folder
                     bat "copy /Y \"${buildJar}\" \"${deployJar}\""
