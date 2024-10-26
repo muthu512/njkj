@@ -8,7 +8,7 @@ pipeline {
                     // Use withCredentials to access Git credentials
                     withCredentials([usernamePassword(credentialsId: 'muthu512', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
                         // Clone the repository using the provided credentials
-                        bat "git clone https://${muthu512}:${512494}https://github.com/muthu512/njkj.gitt"
+                        bat "git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/muthu512/njkj.git"
                     }
                 }
             }
